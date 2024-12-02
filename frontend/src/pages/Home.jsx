@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import api from "../api/endpoint";
 import Title from "../components/Title";
 import AddTodo from "../components/AddTodo";
 import TodoList from "../components/TodoList";
-import { BASE_URL } from "../api/endpoint";
 
 function Home() {
   const [todos, setTodos] = useState([]);
@@ -14,7 +13,7 @@ function Home() {
 
   const fetchTodos = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/todos/`);
+      const response = await api.get("/api/todos/");
       const data = response.data;
       setTodos(data);
     } catch (error) {
@@ -24,7 +23,7 @@ function Home() {
 
   const createTodo = async (newTodo) => {
     try {
-      const response = await axios.post(`${BASE_URL}/todos/`, {
+      const response = await api.post("/api/todos/", {
         name: newTodo,
       });
       const data = response.data;
@@ -36,7 +35,7 @@ function Home() {
 
   const updateTodo = async (id, updatedData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/todos/${id}/`, updatedData);
+      const response = await api.put(`/api/todos/${id}/`, updatedData);
       const data = response.data;
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
@@ -56,7 +55,7 @@ function Home() {
         ...todoToUpdate,
         is_completed: !todoToUpdate.is_completed,
       };
-      const response = await axios.put(`${BASE_URL}/todos/${id}/`, updatedTodo);
+      const response = await api.put(`/api/todos/${id}/`, updatedTodo);
 
       // Update the local state after the update
       setTodos((prevTodos) =>
@@ -71,9 +70,9 @@ function Home() {
     }
   };
 
-  const deleteTodo = async (id) => {
+  const deleteTodo = (id) => {
     try {
-      await axios.delete(`${BASE_URL}/todos/${id}/`);
+      api.delete(`/api/todos/${id}/`);
       setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
     } catch (error) {
       console.error("Error deleting todo:", error);
@@ -81,7 +80,7 @@ function Home() {
   };
 
   return (
-    <div className="container text-center my-4">
+    <>
       <Title />
       <AddTodo addTodo={createTodo} />
       <TodoList
@@ -90,7 +89,7 @@ function Home() {
         toggleComplete={toggleComplete}
         deleteTodo={deleteTodo}
       />
-    </div>
+    </>
   );
 }
 
