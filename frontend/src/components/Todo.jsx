@@ -1,35 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
 import { BsPencilSquare, BsFillTrashFill } from "react-icons/bs";
 
-function Todo({ todo, toggleComplete, updateTodo, deleteTodo }) {
-  const [updatedName, setUpdatedName] = useState("");
-  const [selectedTodo, setSelectedTodo] = useState(null);
-  const [show, setShow] = useState(false);
-
-  const handleShow = (todo) => {
-    setSelectedTodo(todo);
-    setUpdatedName(todo.name);
-    setShow(true);
-  };
-
-  const handleClose = () => {
-    setSelectedTodo(null);
-    setUpdatedName("");
-    setShow(false);
-  };
-
-  const handleUpdate = async () => {
-    await updateTodo(selectedTodo.id, { name: updatedName });
-    handleClose();
-  };
-
-  const handleToggleCompleted = async (id) => {
-    await toggleComplete(id);
-  };
-
+function Todo({ todo, onToggleComplete, openEditModal, openDeleteModal }) {
   return (
     <div className="hstack gap-3 border border-2 rounded p-2">
       <div className="p-2">
@@ -38,7 +11,7 @@ function Todo({ todo, toggleComplete, updateTodo, deleteTodo }) {
             className="form-check-input"
             type="checkbox"
             checked={todo.is_completed}
-            onChange={() => handleToggleCompleted(todo.id)}
+            onChange={() => onToggleComplete(todo.id, todo.is_completed)}
           />
           <label
             className={`form-check-label ms-2 fw-semibold ${
@@ -51,36 +24,10 @@ function Todo({ todo, toggleComplete, updateTodo, deleteTodo }) {
       </div>
       <div className="p-2 ms-auto">
         <div className="hstack gap-2">
-          <Button variant="light" onClick={() => handleShow(todo)}>
+          <Button variant="light" onClick={() => openEditModal(todo.id)}>
             <BsPencilSquare color="blue" />
           </Button>
-          <Modal
-            show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Update Todo</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form.Control
-                type="text"
-                value={updatedName}
-                onChange={(e) => setUpdatedName(e.target.value)}
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleUpdate}>
-                Save
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          <Button variant="light" onClick={() => deleteTodo(todo.id)}>
+          <Button variant="light" onClick={() => openDeleteModal(todo.id)}>
             <BsFillTrashFill color="red" />
           </Button>
         </div>
