@@ -58,10 +58,6 @@ function TodoFormModal({
     },
   });
 
-  const handleTodoStatusChange = (e) => {
-    console.log(e.target.value);
-  };
-
   const handleClose = () => {
     setOpenModal(false);
     resetForm();

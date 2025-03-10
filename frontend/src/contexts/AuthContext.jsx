@@ -51,12 +51,12 @@ function AuthProvider({ children }) {
     }
   };
 
-  const handleUserRegister = async (
+  const handleUserRegister = async ({
     username,
     email,
     password,
-    confirmPassword
-  ) => {
+    confirmPassword,
+  }) => {
     try {
       await api.post("/api/register/", {
         username: username,
@@ -64,13 +64,30 @@ function AuthProvider({ children }) {
         password: password,
         password2: confirmPassword,
       });
-      await handleLogin(username, password);
+      navigate("/login");
     } catch (error) {
       console.error("Error registering user:", error);
+      if (error.response) {
+        const errorData = error.response.data;
+        // map backend errors to formik
+        const errors = {};
+        Object.keys(errorData).forEach((field) => {
+          // handle non-field errors
+          if (field === "non_field_errors") {
+            errors.nonFieldErrors = errorData[field].join("");
+          } else if (field == "detail") {
+            errors.detail = errorData[field].join("");
+          } else {
+            // handle field errors
+            errors[field] = errorData[field].join("");
+          }
+        });
+        throw errors; // to handle in formik onSubmit
+      }
     }
   };
 
-  const handleLogin = async (username, password) => {
+  const handleLogin = async ({ username, password }) => {
     try {
       const response = await api.post("/api/token/", { username, password });
       localStorage.setItem(ACCESS_TOKEN, response.data.access);
@@ -79,6 +96,15 @@ function AuthProvider({ children }) {
       navigate("/");
     } catch (error) {
       console.error("Error during login:", error);
+      if (error.response) {
+        const errorData = error.response.data;
+        // map backend errors to formik
+        const errors = {};
+        if (errorData.detail) {
+          errors.detail = errorData.detail;
+        }
+        throw errors;
+      }
     }
   };
 

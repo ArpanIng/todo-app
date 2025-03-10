@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/esm/Button";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 function Header() {
@@ -24,8 +25,15 @@ function Header() {
               </>
             ) : (
               <>
-                <Button className="me-2">Login</Button>
-                <Button>Register</Button>
+                <Link
+                  to="/login"
+                  className="me-lg-2 mb-2 mb-sm-0 btn btn-primary"
+                >
+                  Login
+                </Link>
+                <Link to="/register" className="btn btn-primary">
+                  Register
+                </Link>
               </>
             )}
           </Nav>
