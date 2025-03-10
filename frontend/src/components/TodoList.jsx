@@ -13,6 +13,7 @@ import {
   updateTodo,
   updateTodoCompletedStatus,
 } from "../services/todoService";
+import { userTodos } from "../services/userService";
 import { getChoiceValue } from "../utils";
 
 function TodoList() {
@@ -38,7 +39,7 @@ function TodoList() {
   const getTodos = async () => {
     setLoading(true);
     try {
-      const response = await fetchTodos();
+      const response = await userTodos();
       setTodos(response.data);
     } catch (error) {
       console.error("Error fetching todos:", error);

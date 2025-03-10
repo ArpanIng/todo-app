@@ -33,6 +33,9 @@ class Todo(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        permissions = [
+            ("view_all_todos", "Can view all todos"),
+        ]
 
     def __str__(self):
         return self.name
