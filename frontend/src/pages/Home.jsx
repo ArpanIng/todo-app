@@ -1,7 +1,7 @@
 import React from "react";
 
 import Title from "../components/Title";
-import TodoList from "../components/TodoList";
+import TaskList from "../components/TaskList";
 import ChoicesProvider from "../contexts/choicesContext";
 
 function Home() {
@@ -9,7 +9,7 @@ function Home() {
     <>
       <Title />
       <ChoicesProvider>
-        <TodoList />
+        <TaskList />
       </ChoicesProvider>
     </>
   );

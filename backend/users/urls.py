@@ -9,6 +9,6 @@ urlpatterns = [
     path("groups/", views.GroupListView.as_view()),
     path("permissions/", views.PermissionListView.as_view()),
     path("register/", views.UserRegistrationView.as_view()),
-    path("users/me/todos/", views.UserTodoListView.as_view()),
-    path("users/<int:user_id>/todos/", views.UserTodoListView.as_view()),
+    path("users/me/tasks/", views.UserTaskListView.as_view()),
+    path("users/<int:user_id>/tasks/", views.UserTaskListView.as_view()),
 ]

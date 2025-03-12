@@ -8,13 +8,13 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 
-function TodoFormModal({
+function TaskFormModal({
   openModal,
   setOpenModal,
   initialData,
   onSubmit,
-  todoPriorityChoices,
-  todoStatusChoices,
+  taskPriorityChoices,
+  taskStatusChoices,
   isEditMode = false,
 }) {
   const validationSchema = Yup.object({
@@ -66,16 +66,16 @@ function TodoFormModal({
   return (
     <>
       <Modal
-        id="todo-form-modal"
+        id="task-form-modal"
         show={openModal}
         onHide={handleClose}
         backdrop="static"
         size="lg"
-        aria-labelledby="todo-form-modal-label"
+        aria-labelledby="task-form-modal-label"
       >
         <Modal.Header closeButton>
-          <Modal.Title id="todo-form-modal-label">
-            {isEditMode ? "Edit todo" : "Add a new todo"}
+          <Modal.Title id="task-form-modal-label">
+            {isEditMode ? "Edit task" : "Add a new task"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -110,7 +110,7 @@ function TodoFormModal({
                   isInvalid={touched.priority && errors.priority}
                 >
                   <option>Select priority</option>
-                  {todoPriorityChoices.map((choice) => (
+                  {taskPriorityChoices.map((choice) => (
                     <option key={choice.value} value={choice.value}>
                       {choice.label}
                     </option>
@@ -133,7 +133,7 @@ function TodoFormModal({
                   isInvalid={touched.status && errors.status}
                 >
                   <option>Select status</option>
-                  {todoStatusChoices.map((choice) => (
+                  {taskStatusChoices.map((choice) => (
                     <option key={choice.value} value={choice.value}>
                       {choice.label}
                     </option>
@@ -184,4 +184,4 @@ function TodoFormModal({
   );
 }
 
-export default TodoFormModal;
+export default TaskFormModal;

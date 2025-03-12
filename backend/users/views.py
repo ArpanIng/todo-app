@@ -3,8 +3,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from todos.models import Todo
-from todos.serializers import UserTodoSerializer
+from tasks.models import Task
+from tasks.serializers import UserTaskSerializer
 
 from .permissions import CustomDjangoObjectPermissions, IsAdmin
 from .serializers import (
@@ -44,9 +44,14 @@ class UserRegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserTodoListView(generics.ListAPIView):
-    queryset = Todo.objects.all()
-    serializer_class = UserTodoSerializer
+class UserTaskListView(generics.ListAPIView):
+    """
+    List all tasks of the request authenticated user.
+    If `user_id` is passed, list all user's tasks of the ID.
+    """
+
+    queryset = Task.objects.all()
+    serializer_class = UserTaskSerializer
 
     def get_permissions(self):
         user = self.request.user

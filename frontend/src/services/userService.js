@@ -1,9 +1,9 @@
 import api from "../api/endpoint";
 
 /*
-Fetch request user todos
+Fetch request user tasks
 */
-export const userTodos = async () => {
-  const response = await api.get("/api/users/me/todos/");
+export const userTasks = async () => {
+  const response = await api.get("/api/users/me/tasks/");
   return response;
 };

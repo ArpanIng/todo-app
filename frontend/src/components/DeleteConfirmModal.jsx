@@ -11,10 +11,10 @@ function DeleteConfirmModal({ openModal, setOpenModal, handleDelete }) {
       centered
     >
       <Modal.Header>
-        <Modal.Title>Delete todo</Modal.Title>
+        <Modal.Title>Delete task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Are you sure you want to delete the selected todo?
+        Are you sure you want to delete the selected task?
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={() => setOpenModal(false)}>

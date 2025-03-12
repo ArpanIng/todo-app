@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # local apps
-    "todos.apps.TodosConfig",
+    "tasks.apps.TasksConfig",
     "users.apps.UsersConfig",
     # third-party packages
     "rest_framework",

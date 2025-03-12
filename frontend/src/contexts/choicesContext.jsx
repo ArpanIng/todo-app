@@ -1,37 +1,37 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
-  fetchTodosStatusChoices,
-  fetchTodosPriorityChoices,
-} from "../services/todoService";
+  fetchTasksStatusChoices,
+  fetchTasksPriorityChoices,
+} from "../services/taskService";
 
 export const ChoicesContext = createContext();
 
 function ChoicesProvider({ children }) {
-  const [todoPriorityChoices, setTodoPriorityChoices] = useState([]);
-  const [todoStatusChoices, setTodoStatusChoices] = useState([]);
+  const [taskPriorityChoices, setTaskPriorityChoices] = useState([]);
+  const [taskStatusChoices, setTaskStatusChoices] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getTodoPriorityChoices = async () => {
+  const getTaskPriorityChoices = async () => {
     try {
-      const response = await fetchTodosPriorityChoices();
-      setTodoPriorityChoices(response.data.choices);
+      const response = await fetchTasksPriorityChoices();
+      setTaskPriorityChoices(response.data.choices);
     } catch (error) {
-      console.error("Error fetching todo priority choices:", error);
+      console.error("Error fetching task priority choices:", error);
     }
   };
 
-  const getTodoStatusChoices = async () => {
+  const getTaskStatusChoices = async () => {
     try {
-      const response = await fetchTodosStatusChoices();
-      setTodoStatusChoices(response.data.choices);
+      const response = await fetchTasksStatusChoices();
+      setTaskStatusChoices(response.data.choices);
     } catch (error) {
-      console.error("Error fetching todo priority choices:", error);
+      console.error("Error fetching task priority choices:", error);
     }
   };
 
   const fetchData = async () => {
     setLoading(true);
-    await Promise.all([getTodoPriorityChoices(), getTodoStatusChoices()]);
+    await Promise.all([getTaskPriorityChoices(), getTaskStatusChoices()]);
     setLoading(false);
   };
 
@@ -40,7 +40,7 @@ function ChoicesProvider({ children }) {
   }, []);
 
   return (
-    <ChoicesContext.Provider value={{ todoPriorityChoices, todoStatusChoices }}>
+    <ChoicesContext.Provider value={{ taskPriorityChoices, taskStatusChoices }}>
       {children}
     </ChoicesContext.Provider>
   );

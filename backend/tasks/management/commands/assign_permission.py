@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
-from todos.models import Todo
+from tasks.models import Task
 
 
 class Command(BaseCommand):
@@ -17,13 +17,13 @@ class Command(BaseCommand):
                 self.style.WARNING("Group matching query does not exist.")
             )
 
-        content_type = ContentType.objects.get_for_model(Todo)
-        todo_permissions = Permission.objects.filter(content_type=content_type)
+        content_type = ContentType.objects.get_for_model(Task)
+        task_permissions = Permission.objects.filter(content_type=content_type)
         # iterate all permissions and assign respective permission to the groups
-        for perm in todo_permissions:
+        for perm in task_permissions:
             admin_group.permissions.add(perm)
 
-            if perm.codename != 'view_all_todos':
+            if perm.codename != "view_all_tasks":
                 member_group.permissions.add(perm)
 
         self.stdout.write(self.style.SUCCESS("Permissions assigned successfully."))

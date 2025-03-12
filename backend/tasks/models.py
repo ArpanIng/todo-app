@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 
 
-class Todo(models.Model):
+class Task(models.Model):
     class PriorityTextChoices(models.TextChoices):
         LOW = "L", "Low"
         MEDIUM = "M", "Medium"
@@ -16,7 +16,7 @@ class Todo(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField(blank=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="todos"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="tasks"
     )
     priority = models.CharField(
         max_length=1,
@@ -34,7 +34,7 @@ class Todo(models.Model):
     class Meta:
         ordering = ["-created_at"]
         permissions = [
-            ("view_all_todos", "Can view all todos"),
+            ("view_all_tasks", "Can view all tasks"),
         ]
 
     def __str__(self):

@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
-from .models import Todo
+from .models import Task
 
 
-class UserTodoSerializer(serializers.ModelSerializer):
+class UserTaskSerializer(serializers.ModelSerializer):
     """Serializer for regular user."""
 
     class Meta:
-        model = Todo
+        model = Task
         fields = [
             "id",
             "name",
@@ -27,11 +27,11 @@ class UserTodoSerializer(serializers.ModelSerializer):
         return data
 
 
-class TodoSerializer(serializers.ModelSerializer):
+class TaskSerializer(serializers.ModelSerializer):
     """Serializer for admin group user."""
 
     class Meta:
-        model = Todo
+        model = Task
         fields = [
             "id",
             "name",

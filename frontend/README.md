@@ -15,6 +15,8 @@ Currently, two official plugins are available:
 npm install
 ```
 
+> **Note:** Setup environment variables file
+
 ### Run the development server
 
 ```bash

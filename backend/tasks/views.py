@@ -8,14 +8,14 @@ from guardian.shortcuts import assign_perm
 
 from users.permissions import CustomDjangoObjectPermissions, IsAdmin
 
-from .models import Todo
-from .serializers import TodoSerializer, UserTodoSerializer
+from .models import Task
+from .serializers import TaskSerializer, UserTaskSerializer
 
 
-class TodoListCreateView(generics.ListCreateAPIView):
-    """List all todos, or create a new todo."""
+class TaskListCreateView(generics.ListCreateAPIView):
+    """List all tasks, or create a new task."""
 
-    queryset = Todo.objects.all()
+    queryset = Task.objects.all()
 
     def get_permissions(self):
         if self.request.method in SAFE_METHODS:
@@ -28,45 +28,45 @@ class TodoListCreateView(generics.ListCreateAPIView):
     def get_serializer_class(self):
         user = self.request.user
         if user.is_admin_group_user:
-            return TodoSerializer
-        return UserTodoSerializer
+            return TaskSerializer
+        return UserTaskSerializer
 
     def perform_create(self, serializer):
         user = self.request.user
         if user.is_admin_group_user:
-            todo_obj = serializer.save()
+            task_obj = serializer.save()
             # Assign object-level permissions to the assigned user
-            assign_perm("view_todo", todo_obj.user, todo_obj)
-            assign_perm("change_todo", todo_obj.user, todo_obj)
-            assign_perm("delete_todo", todo_obj.user, todo_obj)
+            assign_perm("view_task", task_obj.user, task_obj)
+            assign_perm("change_task", task_obj.user, task_obj)
+            assign_perm("delete_task", task_obj.user, task_obj)
         else:
-            todo_obj = serializer.save(user=user)
+            task_obj = serializer.save(user=user)
             # Assign object-level permissions to the request user
-            assign_perm("view_todo", user, todo_obj)
-            assign_perm("change_todo", user, todo_obj)
-            assign_perm("delete_todo", user, todo_obj)
+            assign_perm("view_task", user, task_obj)
+            assign_perm("change_task", user, task_obj)
+            assign_perm("delete_task", user, task_obj)
 
         # Assign object-level permissions to the 'Admin' group
         try:
             admin_group = Group.objects.get(name="Admin")
-            assign_perm("change_todo", admin_group, todo_obj)
-            assign_perm("view_todo", admin_group, todo_obj)
-            assign_perm("delete_todo", admin_group, todo_obj)
+            assign_perm("change_task", admin_group, task_obj)
+            assign_perm("view_task", admin_group, task_obj)
+            assign_perm("delete_task", admin_group, task_obj)
         except Group.DoesNotExist:
             pass
 
 
-class TodoDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """Retrieve, update or delete a todo."""
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve, update or delete a task."""
 
-    queryset = Todo.objects.all()
+    queryset = Task.objects.all()
     permission_classes = [CustomDjangoObjectPermissions]
 
     def get_serializer_class(self):
         user = self.request.user
         if user.is_admin_group_user:
-            return TodoSerializer
-        return UserTodoSerializer
+            return TaskSerializer
+        return UserTaskSerializer
 
     def perform_update(self, serializer):
         user = self.request.user
@@ -76,26 +76,26 @@ class TodoDetailView(generics.RetrieveUpdateDestroyAPIView):
             return serializer.save(user=self.request.user)
 
 
-class TodoPriorityChoicesView(APIView):
-    """Retrieve priority choices of a Todo model."""
+class TaskPriorityChoicesView(APIView):
+    """Retrieve priority choices of a Task model."""
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         priority_choices = [
             {"value": value, "label": label}
-            for value, label in Todo.PriorityTextChoices.choices
+            for value, label in Task.PriorityTextChoices.choices
         ]
         return Response({"choices": priority_choices})
 
 
-class TodoStatusChoicesView(APIView):
-    """Retrieve status choices of a Todo model."""
+class TaskStatusChoicesView(APIView):
+    """Retrieve status choices of a Task model."""
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         status_choices = [
-            {"value": value, "label": label} for value, label in Todo.Status.choices
+            {"value": value, "label": label} for value, label in Task.Status.choices
         ]
         return Response({"choices": status_choices})

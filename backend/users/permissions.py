@@ -11,8 +11,8 @@ class CustomDjangoObjectPermissions(DjangoObjectPermissions):
 
 class IsAdmin(BasePermission):
     """
-    Check permission if the user has the 'can_view_all_todos' permission.
+    Check permission if the user has the 'can_view_all_tasks' permission.
     """
 
     def has_permission(self, request, view):
-        return bool(request.user and request.user.has_perm("todos.view_all_todos"))
+        return bool(request.user and request.user.has_perm("tasks.view_all_tasks"))
