@@ -30,12 +30,11 @@ class UserRegistrationView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
 
-            try:
-                Group.objects.get(name="User")
-            except Group.DoesNotExist:
-                pass
+            # assign user to group
+            member_group = Group.objects.get(name="Member")
+            user.groups.add(member_group)
 
             return Response(
                 {"message": "User registered successfully."},
