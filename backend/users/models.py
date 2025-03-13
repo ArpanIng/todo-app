@@ -10,4 +10,4 @@ class CustomUser(AbstractUser):
 
     @property
     def is_admin_group_user(self):
-        return self.has_perm("taskss.view_all_taskss")
+        return self.has_perm("tasks.view_all_tasks")

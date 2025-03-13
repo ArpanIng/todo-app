@@ -4,8 +4,6 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from guardian.shortcuts import assign_perm
-
 from users.permissions import CustomDjangoObjectPermissions, IsAdmin
 
 from .models import Task
@@ -34,26 +32,9 @@ class TaskListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         if user.is_admin_group_user:
-            task_obj = serializer.save()
-            # Assign object-level permissions to the assigned user
-            assign_perm("view_task", task_obj.user, task_obj)
-            assign_perm("change_task", task_obj.user, task_obj)
-            assign_perm("delete_task", task_obj.user, task_obj)
+            serializer.save()
         else:
-            task_obj = serializer.save(user=user)
-            # Assign object-level permissions to the request user
-            assign_perm("view_task", user, task_obj)
-            assign_perm("change_task", user, task_obj)
-            assign_perm("delete_task", user, task_obj)
-
-        # Assign object-level permissions to the 'Admin' group
-        try:
-            admin_group = Group.objects.get(name="Admin")
-            assign_perm("change_task", admin_group, task_obj)
-            assign_perm("view_task", admin_group, task_obj)
-            assign_perm("delete_task", admin_group, task_obj)
-        except Group.DoesNotExist:
-            pass
+            serializer.save(user=user)
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
