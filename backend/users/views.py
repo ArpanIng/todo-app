@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 
 from tasks.models import Task
 from tasks.serializers import UserTaskSerializer
+from tasks.tasks import send_registration_email
 
 from .permissions import CustomDjangoObjectPermissions, IsAdmin
 from .serializers import (
@@ -31,6 +32,7 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            send_registration_email.delay_on_commit(user.username, user.email)
 
             # assign user to group
             member_group = Group.objects.get(name="Member")

@@ -18,6 +18,18 @@ poetry run python manage.py migrate
 poetry run python manage.py assign_permission
 ```
 
+### Start celery worker process
+
+```bash
+poetry run celery -A config worker -l INFO
+```
+
+### Start celery beat process
+
+```bash
+poetry run celery -A config beat -l INFO
+```
+
 ### Run the development server
 
 ```bash
