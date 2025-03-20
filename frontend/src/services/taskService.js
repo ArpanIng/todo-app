@@ -41,3 +41,13 @@ export const fetchTasksStatusChoices = async () => {
   const response = await api.get("/api/tasks/status-choices/");
   return response;
 };
+
+export const fetchNotificationTypeChoices = async () => {
+  const response = await api.get("/api/notifications/type-choices/");
+  return response;
+};
+
+export const fetchNotificationTimeUnitChoices = async () => {
+  const response = await api.get("/api/notifications/time-unit-choices/");
+  return response;
+};

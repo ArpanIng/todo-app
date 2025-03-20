@@ -8,6 +8,14 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 
+import {
+  BsBell,
+  BsBriefcase,
+  BsCalendar,
+  BsTextLeft,
+  BsXLg,
+} from "react-icons/bs";
+
 function TaskFormModal({
   openModal,
   setOpenModal,
@@ -15,6 +23,8 @@ function TaskFormModal({
   onSubmit,
   taskPriorityChoices,
   taskStatusChoices,
+  notificationTypeChoices,
+  notificationTimeUnitChoices,
   isEditMode = false,
 }) {
   const validationSchema = Yup.object({
@@ -55,6 +65,7 @@ function TaskFormModal({
     enableReinitialize: true,
     onSubmit: (values) => {
       onSubmit(values);
+      resetForm();
     },
   });
 
@@ -81,26 +92,33 @@ function TaskFormModal({
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             {/* name field */}
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="name">Name</Form.Label>
-              <Form.Control
-                type="text"
-                id="name"
-                name="name"
-                value={values.name}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                isInvalid={touched.name && errors.name}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.name}
-              </Form.Control.Feedback>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label htmlFor="name" column sm={1}>
+                Name
+              </Form.Label>
+              <Col sm={11}>
+                <Form.Control
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={values.name}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  isInvalid={touched.name && errors.name}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.name}
+                </Form.Control.Feedback>
+              </Col>
             </Form.Group>
 
-            <Row className="mb-3">
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={1}>
+                <BsBriefcase />
+              </Form.Label>
+
               {/* priority field */}
-              <Form.Group as={Col}>
-                <Form.Label htmlFor="priority">Priority</Form.Label>
+              <Col sm={5}>
                 <Form.Select
                   id="priority"
                   name="priority"
@@ -119,11 +137,10 @@ function TaskFormModal({
                 <Form.Control.Feedback type="invalid">
                   {errors.priority}
                 </Form.Control.Feedback>
-              </Form.Group>
+              </Col>
 
-              <Form.Group as={Col}>
-                {/* status field */}
-                <Form.Label htmlFor="status">Status</Form.Label>
+              {/* status field */}
+              <Col sm={5}>
                 <Form.Select
                   id="status"
                   name="status"
@@ -142,31 +159,82 @@ function TaskFormModal({
                 <Form.Control.Feedback type="invalid">
                   {errors.status}
                 </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
+              </Col>
+            </Form.Group>
 
             {/* due date field */}
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="due-date">Due date</Form.Label>
-              <Form.Control type="datetime-local" id="due-date" />
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label htmlFor="due-date" column sm={1}>
+                <BsCalendar />
+              </Form.Label>
+              <Col sm={11}>
+                <Form.Control type="date" id="due-date" />
+              </Col>
+            </Form.Group>
+
+            {/* notification fields */}
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={1}>
+                <BsBell />
+              </Form.Label>
+
+              {/* notification type field */}
+              <Col sm={4}>
+                <Form.Select>
+                  <option>Select type</option>
+                  {notificationTypeChoices.map((choice) => (
+                    <option key={choice.value} value={choice.value}>
+                      {choice.label}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+
+              {/* notification time value field */}
+              <Col sm={2}>
+                <Form.Control type="number" />
+              </Col>
+
+              {/* notification time unit field */}
+              <Col sm={3}>
+                <Form.Select>
+                  <option>Select unit</option>
+                  {notificationTimeUnitChoices.map((choice) => (
+                    <option key={choice.value} value={choice.value}>
+                      {choice.label}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+
+              <Col sm={1}>
+                <Button variant="light">
+                  <BsXLg />
+                </Button>
+              </Col>
             </Form.Group>
 
             {/* description field */}
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="description">Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                id="description"
-                rows={5}
-                name="description"
-                value={values.description}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                isInvalid={touched.description && errors.description}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.description}
-              </Form.Control.Feedback>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label htmlFor="description" column sm={1}>
+                <BsTextLeft />
+              </Form.Label>
+              <Col sm={11}>
+                <Form.Control
+                  as="textarea"
+                  id="description"
+                  rows={5}
+                  name="description"
+                  value={values.description}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  isInvalid={touched.description && errors.description}
+                  placeholder="Add description"
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description}
+                </Form.Control.Feedback>
+              </Col>
             </Form.Group>
 
             <div className="d-flex justify-content-end gap-2">

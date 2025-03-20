@@ -20,7 +20,12 @@ function TaskList() {
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { taskPriorityChoices, taskStatusChoices } = useChoices();
+  const {
+    taskPriorityChoices,
+    taskStatusChoices,
+    notificationTypeChoices,
+    notificationTimeUnitChoices,
+  } = useChoices();
 
   // modals
   const [openModal, setOpenModal] = useState(false);
@@ -169,6 +174,8 @@ function TaskList() {
         onSubmit={handleSubmit}
         taskPriorityChoices={taskPriorityChoices}
         taskStatusChoices={taskStatusChoices}
+        notificationTypeChoices={notificationTypeChoices}
+        notificationTimeUnitChoices={notificationTimeUnitChoices}
         isEditMode={!!task} // double-negation
       />
 

@@ -1,4 +1,3 @@
-from django.contrib.auth.models import Group
 from rest_framework import generics
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
@@ -6,14 +5,15 @@ from rest_framework.views import APIView
 
 from users.permissions import CustomDjangoObjectPermissions, IsAdmin
 
-from .models import Task
-from .serializers import TaskSerializer, UserTaskSerializer
+from .models import Notification, Task
+from .serializers import NotificationSerializer, TaskSerializer
 
 
 class TaskListCreateView(generics.ListCreateAPIView):
     """List all tasks, or create a new task."""
 
     queryset = Task.objects.all()
+    serializer_class = TaskSerializer
 
     def get_permissions(self):
         if self.request.method in SAFE_METHODS:
@@ -22,12 +22,6 @@ class TaskListCreateView(generics.ListCreateAPIView):
         else:
             permission_classes = [CustomDjangoObjectPermissions]
         return [permission() for permission in permission_classes]
-
-    def get_serializer_class(self):
-        user = self.request.user
-        if user.is_admin_group_user:
-            return TaskSerializer
-        return UserTaskSerializer
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -42,12 +36,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Task.objects.all()
     permission_classes = [CustomDjangoObjectPermissions]
-
-    def get_serializer_class(self):
-        user = self.request.user
-        if user.is_admin_group_user:
-            return TaskSerializer
-        return UserTaskSerializer
+    serializer_class = TaskSerializer
 
     def perform_update(self, serializer):
         user = self.request.user
@@ -80,3 +69,43 @@ class TaskStatusChoicesView(APIView):
             {"value": value, "label": label} for value, label in Task.Status.choices
         ]
         return Response({"choices": status_choices})
+
+
+class NotificationListCreateView(generics.ListCreateAPIView):
+    """List all notifications, or create a new notification."""
+
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+
+class NotificationDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve, update or delete a notification."""
+
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+
+class NotificationTypeChoicesView(APIView):
+    """Retrieve type choices of a Notification model."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        choices = [
+            {"value": value, "label": label}
+            for value, label in Notification.NotificationTypeChoices.choices
+        ]
+        return Response({"choices": choices})
+
+
+class NotificationTimeUnitChoicesView(APIView):
+    """Retrieve time unit choices of a Notification model."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        choices = [
+            {"value": value, "label": label}
+            for value, label in Notification.NotificationTimeUnitChoices.choices
+        ]
+        return Response({"choices": choices})

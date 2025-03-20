@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from tasks.models import Task
-from tasks.serializers import UserTaskSerializer
+from tasks.serializers import TaskSerializer
 from tasks.tasks import send_registration_email
 
 from .permissions import CustomDjangoObjectPermissions, IsAdmin
@@ -52,7 +52,7 @@ class UserTaskListView(generics.ListAPIView):
     """
 
     queryset = Task.objects.all()
-    serializer_class = UserTaskSerializer
+    serializer_class = TaskSerializer
 
     def get_permissions(self):
         user = self.request.user
